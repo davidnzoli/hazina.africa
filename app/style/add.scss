@@ -1,0 +1,266 @@
+$primary-color: #0070f3;
+
+.box-content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  .glob-content {
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 100px;
+  }
+  .post {
+    width: 97%;
+  }
+}
+.title-header h1 {
+  text-align: center;
+  font-size: 30px;
+  color: #333;
+}
+
+.form-input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.form-input-label div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+//Response....
+
+@media (min-width: 0px) {
+  .box-content {
+    width: 100%;
+    height: 130vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    .glob-content {
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      .in-glob-content {
+        width: 90%;
+        height: 100%;
+      }
+    }
+  }
+  .form-input-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+
+  .form-input-label div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+  }
+  .title-header h1 {
+    text-align: center;
+    font-size: 15px;
+    color: #333;
+  }
+  .boutton-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+    gap: 10px;
+  }
+  #outlined-size-small {
+    width: 30vh;
+    height: 50px;
+  }
+  #demo-select-small {
+    height: 50px;
+  }
+  #button {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+@media (min-width: 774px) {
+  .box-content {
+    width: 100%;
+    height: 160vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .glob-content {
+      padding: 30px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      .in-glob-content {
+        width: 90%;
+        height: 100%;
+        display: "flex";
+        flex-direction: "column";
+        gap: "5px";
+      }
+    }
+    .post {
+      width: 97%;
+    }
+  }
+  .title-header h1 {
+    text-align: center;
+    font-size: 30px;
+    color: #333;
+  }
+
+  .form-input-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+
+  .form-input-label div {
+    display: flex;
+    flex-direction: row;
+    align-items: normal;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .boutton-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    gap: 10px;
+  }
+  #outlined-size-small {
+    width: 30vh;
+    height: 50px;
+  }
+  #demo-select-small {
+    width: 26vh;
+    height: 50px;
+  }
+  #button {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    text-align: center;
+  }
+  .post {
+    width: 100%;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .box-content {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .glob-content {
+      padding: 30px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      align-items: center;
+      gap: 100px;
+      .in-glob-content {
+        width: 50%;
+        display: "flex";
+        flex-direction: "column";
+        gap: "5px";
+        .boutton-div {
+          width: 30%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: start;
+          gap: 0px;
+          // background-color: red;
+          #button {
+            width: 0%;
+            height: 60px;
+            padding: 10px;
+            text-align: center;
+          }
+        }
+      }
+    }
+    .post {
+      width: 97%;
+    }
+  }
+  .title-header h1 {
+    text-align: center;
+    font-size: 30px;
+    color: #333;
+  }
+
+  .form-input-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+
+  .form-input-label div {
+    display: flex;
+    flex-direction: row;
+    align-items: normal;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #outlined-size-small {
+    width: 30vh;
+    height: 35px;
+  }
+  #demo-select-small {
+    width: 30vh;
+    height: 35px;
+  }
+}
