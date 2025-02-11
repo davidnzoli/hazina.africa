@@ -1,224 +1,3 @@
-// "use client";
-
-// import { useState, useRef, ChangeEvent } from "react";
-// import Box from "@mui/material/Box";
-// import TextField from "@mui/material/TextField";
-// import { Button } from "@mui/material";
-// import { CloudUpload } from "@mui/icons-material";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import FormControl from "@mui/material/FormControl";
-// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-// import Select, { SelectChangeEvent } from "@mui/material/Select";
-// import QRCode from "qrcode";
-
-// const AddUser = () => {
-//   const [age, setAge] = useState("");
-//   const [formData, setFormData] = useState({
-//     Nom: "",
-//     Postnom: "",
-//     Sexe: "",
-//     Poste: "",
-//     File: null,
-//     email: "",
-//     Telephone: "",
-//   });
-
-//   const canvasRef = useRef(null);
-
-//   const handleSelectChange = (event) => {
-//     setAge(event.target.value);
-//     setFormData({ ...formData, Sexe: event.target.value });
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({ ...formData, [name]: value });
-//   };
-
-//   const generateQR = async () => {
-//     if (canvasRef.current) {
-//       const jsonData = JSON.stringify(formData);
-//       await QRCode.toCanvas(canvasRef.current, jsonData, {
-//         width: 300,
-//         margin: 2,
-//       });
-//     }
-
-//     const data = {
-//       nom: formData.Nom,
-//       postnom: formData.Postnom,
-
-//       sexe: formData.Sexe,
-//       poste: formData.Poste,
-//       email_adress: formData.email,
-//       telephone: formData.Telephone,
-//     };
-
-//     const response = await fetch("/api/personels", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
-
-//     if (response.ok) {
-//       console.log("Données enregistrées avec succès !");
-//     } else {
-//       console.error("Erreur lors de l'enregistrement des données.");
-//     }
-//   };
-
-//   const downloadQR = () => {
-//     if (canvasRef.current) {
-//       const canvas = canvasRef.current;
-//       const image = canvas.toDataURL("image/png");
-//       const link = document.createElement("a");
-//       link.href = image;
-//       link.download = "qrcode.png";
-//       link.click();
-//     }
-//   };
-
-//   return (
-//     <Box
-//       component="form"
-//       className="box-content"
-//       sx={{
-//         "& .MuiTextField-root": { m: 1, width: "25ch" },
-//       }}
-//       noValidate
-//       autoComplete="off"
-//     >
-//       <div className="glob-content">
-//         <div
-//           className="in-glob-content"
-//           style={{ display: "flex", flexDirection: "column", gap: "5px" }}
-//         >
-//           <div className="title-header">
-//             <h1>Ajouter un personnel</h1>
-//           </div>
-//           <div className="form-input-label">
-//             <div>
-//               <TextField
-//                 label="Nom"
-//                 id="outlined-size-small"
-//                 name="Nom"
-//                 value={formData.Nom}
-//                 onChange={handleInputChange}
-//                 size="small"
-//               />
-//               <TextField
-//                 label="Postnom"
-//                 id="outlined-size-small"
-//                 name="Postnom"
-//                 value={formData.Postnom}
-//                 onChange={handleInputChange}
-//                 size="small"
-//               />
-//             </div>
-
-//             <div>
-//               <TextField
-//                 label="Email"
-//                 id="outlined-size-small"
-//                 name="email"
-//                 type="email"
-//                 onChange={handleInputChange}
-//                 size="small"
-//               />
-
-//               <FormControl sx={{ m: 1, minWidth: 220 }} size="small">
-//                 <InputLabel id="demo-select-small-label">Sexe</InputLabel>
-//                 <Select
-//                   labelId="demo-select-small-label"
-//                   id="demo-select-small"
-//                   value={formData.Sexe}
-//                   label="Sexe"
-//                   onChange={handleSelectChange}
-//                 >
-//                   <MenuItem value={"10"}>M</MenuItem>
-//                   <MenuItem value={"20"}>F</MenuItem>
-//                 </Select>
-//               </FormControl>
-//             </div>
-//             <div>
-//               <TextField
-//                 type="file"
-//                 id="outlined-size-small"
-//                 size="small"
-//                 name="File"
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 label="Telephone"
-//                 id="outlined-size-small"
-//                 name="Telephone"
-//                 value={formData.Telephone}
-//                 onChange={handleInputChange}
-//                 size="small"
-//               />
-//             </div>
-//           </div>
-//           <TextField
-//             label="Fonction (Post)"
-//             id="outlined-size-small"
-//             className="post"
-//             name="Poste"
-//             value={formData.Poste}
-//             onChange={handleInputChange}
-//             size="small"
-//           />
-//           <div
-//             className="boutton-div"
-//             style={{
-//               width: "99%",
-//               display: "flex",
-//               flexDirection: "row",
-//               justifyContent: "space-between",
-//               alignItems: "center",
-//             }}
-//           >
-//             <Button
-//               variant="contained"
-//               type="button"
-//               sx={{ margin: "10px 10px", padding: "10px 10px" }}
-//               onClick={generateQR}
-//               startIcon={<OpenInNewIcon />}
-//               color="success"
-//             >
-//               Générer Qrcode
-//             </Button>
-//             <Button
-//               component="label"
-//               role={undefined}
-//               variant="contained"
-//               onClick={downloadQR}
-//               sx={{ padding: "10px 20px" }}
-//               tabIndex={-1}
-//               startIcon={<CloudUpload />}
-//             >
-//               Upload Qrcode
-//             </Button>
-//           </div>
-//         </div>
-//         <div className="">
-//           <div>
-//             <canvas
-//               ref={canvasRef}
-//               className="qrcode"
-//               style={{ marginTop: "10px" }}
-//             ></canvas>
-//           </div>
-//         </div>
-//       </div>
-//     </Box>
-//   );
-// };
-
-// export default AddUser;
-
 "use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
@@ -246,22 +25,25 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 export default function Checkout() {
-  const [age, setAge] = useState("");
+  // const [age, setAge] = useState("");
+  const canvasRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const [formData, setFormData] = useState({
-    Nom: "",
-    Postnom: "",
-    Sexe: "",
-    Poste: "",
-    File: null,
+    nom: "",
+    postNom: "",
+    sexe: "",
+    poste: "",
     email: "",
-    Telephone: "",
+    photo: "",
+    // Telephone: "",
   });
 
-  const canvasRef = useRef(null);
-
   const handleSelectChange = (event) => {
-    setAge(event.target.value);
-    setFormData({ ...formData, Sexe: event.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      sexe: event.target.value,
+    }));
   };
 
   const handleInputChange = (e) => {
@@ -270,36 +52,48 @@ export default function Checkout() {
   };
 
   const generateQR = async () => {
-    if (canvasRef.current) {
-      const jsonData = JSON.stringify(formData);
-      await QRCode.toCanvas(canvasRef.current, jsonData, {
-        width: 300,
-        margin: 2,
-      });
-    }
+    const formDataToSend = new FormData();
 
-    const data = {
-      nom: formData.Nom,
-      postnom: formData.Postnom,
-
-      sexe: formData.Sexe,
-      poste: formData.Poste,
-      email_adress: formData.email,
-      telephone: formData.Telephone,
-    };
-
-    const response = await fetch("/api/personels", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    // Ajouter les autres champs du formulaire
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
     });
 
-    if (response.ok) {
-      console.log("Données enregistrées avec succès !");
-    } else {
-      console.error("Erreur lors de l'enregistrement des données.");
+    // Ajouter le fichier si présent
+    if (selectedFile) {
+      formDataToSend.append("file", selectedFile);
+    }
+
+    try {
+      const response = await fetch("/api/personels", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        console.error("Erreur d'enregistrement :", await response.json());
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Données enregistrées avec succès :", result);
+
+      if (canvasRef.current) {
+        const jsonData = JSON.stringify(formData);
+        await QRCode.toCanvas(canvasRef.current, jsonData, {
+          width: 300,
+          margin: 2,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement :", error);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
     }
   };
 
@@ -313,6 +107,7 @@ export default function Checkout() {
       link.click();
     }
   };
+
   return (
     <>
       <CssBaseline enableColorScheme />
@@ -381,6 +176,9 @@ export default function Checkout() {
               style={{ marginTop: "10px", maxWidth: "100%", maxHeight: "60%" }}
             ></canvas>
           </Box>
+          {/* {formData.photo && (
+            <img src={formData.photo} alt="Photo" width={70} />
+          )} */}
         </Grid>
         <Grid
           item
@@ -419,11 +217,13 @@ export default function Checkout() {
               </FormLabel>
               <OutlinedInput
                 id="last-name"
-                name="last-name"
+                name="postNom"
                 placeholder="John"
                 required
                 size="small"
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, postNom: e.target.value })
+                }
               />
             </FormGrid>
             <FormGrid item xs={12}>
@@ -436,10 +236,27 @@ export default function Checkout() {
                 placeholder="exemple@gmail.com"
                 required
                 size="small"
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </FormGrid>
-            <FormGrid item xs={12}>
+            <FormGrid item xs={6}>
+              <FormLabel htmlFor="city" required>
+                telephone
+              </FormLabel>
+              <OutlinedInput
+                id=" telephone"
+                name=" telephone"
+                placeholder=""
+                required
+                size="small"
+                // onChange={(e) =>
+                //   setFormData({ ...formData, telephone: e.target.value })
+                // }
+              />
+            </FormGrid>
+            <FormGrid item xs={6}>
               <FormLabel htmlFor="sexe">Sexe</FormLabel>
               <Select
                 id="sexe"
@@ -447,7 +264,8 @@ export default function Checkout() {
                 displayEmpty
                 fullWidth
                 size="small"
-                onChange={handleInputChange}
+                value={formData.sexe}
+                onChange={handleSelectChange}
               >
                 <MenuItem value="Choisissez votre sexe" disabled>
                   Choisissez votre sexe
@@ -463,14 +281,15 @@ export default function Checkout() {
               </FormLabel>
               <OutlinedInput
                 id="photo"
-                name="photo"
+                name="file"
                 placeholder=""
                 required
                 type="file"
                 size="small"
-                onChange={handleInputChange}
+                onChange={(e) => handleFileChange(e)}
               />
             </FormGrid>
+
             <FormGrid item xs={6}>
               <FormLabel htmlFor="state" required>
                 Poste Travail
@@ -481,7 +300,9 @@ export default function Checkout() {
                 placeholder="Poste"
                 required
                 size="small"
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, poste: e.target.value })
+                }
               />
             </FormGrid>
             <div

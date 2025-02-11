@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 // import Footer from "../components/footer";
 // import Navbar from "../components/navBar";
-import SessionWrapper from "@/lib/sessionWrapper";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -34,7 +33,6 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <SessionWrapper>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -44,6 +42,5 @@ export default function RootLayout({ children }) {
           {/* <Footer /> */}
         </body>
       </html>
-    </SessionWrapper>
   );
 }
