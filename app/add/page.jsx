@@ -3,6 +3,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
+import ChevronRightIcon from "@mui/icons-material/ChevronLeft";
 import {
   FormControlLabel,
   FormLabel,
@@ -18,6 +19,7 @@ import { Button } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import QRCode from "qrcode";
+import Link from "next/link";
 
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
@@ -36,7 +38,7 @@ export default function Checkout() {
     poste: "",
     email: "",
     photo: "",
-    // Telephone: "",
+    Telephone: "",
   });
 
   const handleSelectChange = (event) => {
@@ -125,9 +127,23 @@ export default function Checkout() {
           justifyContent: "right",
           padding: "5px 50px",
           alignItems: "center",
+          gap: "20px",
         }}
       >
         <h1 style={{ color: "blue", fontSize: "16px" }}>AJOUTER PERSONNELS</h1>
+        <Link
+          href="/listPersonel"
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+            gap: "3px",
+            textDecoration: "none",
+          }}
+        >
+          <ChevronRightIcon style={{ color: "black" }} />
+          <h1 style={{ color: "black", fontSize: "14px" }}> Back</h1>
+        </Link>
       </div>
 
       <Grid
@@ -232,7 +248,7 @@ export default function Checkout() {
               </FormLabel>
               <OutlinedInput
                 id="address"
-                name="address"
+                name="email"
                 placeholder="exemple@gmail.com"
                 required
                 size="small"
@@ -251,9 +267,9 @@ export default function Checkout() {
                 placeholder=""
                 required
                 size="small"
-                // onChange={(e) =>
-                //   setFormData({ ...formData, telephone: e.target.value })
-                // }
+                onChange={(e) =>
+                  setFormData({ ...formData, telephone: e.target.value })
+                }
               />
             </FormGrid>
             <FormGrid item xs={6}>
@@ -296,7 +312,7 @@ export default function Checkout() {
               </FormLabel>
               <OutlinedInput
                 id="poste"
-                name="state"
+                name="poste"
                 placeholder="Poste"
                 required
                 size="small"

@@ -10,17 +10,17 @@ datasource db {
 model User {
   id        Int    @id @default(autoincrement())
   nom       String
-  email     String @unique(map: "User_email_key")
+  email     String @unique
   sexe      String
   telephone String
 }
 
 model Personels {
-  id String @id @default(uuid())
-
+  id         String   @id @default(uuid())
   nom        String
   postNom    String
   email      String
+  telephone  String
   sexe       String
   photo      String
   poste      String

@@ -3,21 +3,30 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
+
+
 export async function GET() {
   try {
+    console.log("Récupération des données...");
     const personels = await prisma.personels.findMany();
 
-    // Formatage des dates
     const formattedPersonels = personels.map((personel) => ({
       ...personel,
-      createdAt: format(new Date(personel.createdAt), "dd MMMM yyyy à HH:mm:ss", { locale: fr }),
+      createdAt: personel.createdAt?.toISOString(),
     }));
 
+    console.log(" Données envoyées :", formattedPersonels);
     return NextResponse.json(formattedPersonels, { status: 200 });
+
   } catch (error) {
-    return NextResponse.json({ error: "Erreur lors de la récupération des données" }, { status: 500 });
+    console.error(" Erreur API /api/personels :", error);
+    return NextResponse.json(
+      { error: "Erreur lors de la récupération des données", details: error.message },
+      { status: 500 }
+    );
   }
 }
+
 
 export async function POST(request) {
   try {
@@ -26,6 +35,7 @@ export async function POST(request) {
     const nom = formData.get("nom");
     const postNom = formData.get("postNom");
     const email = formData.get("email");
+    const telephone = formData.get("telephone");
     const sexe = formData.get("sexe");
     const poste = formData.get("poste");
     const file = formData.get("file"); // Récupérer le fichier
@@ -49,7 +59,7 @@ export async function POST(request) {
 
     // Enregistrer les informations dans la base de données
     const newPersonel = await prisma.personels.create({
-      data: { nom, postNom, email, sexe, poste, photo: photoPath },
+      data: { nom, postNom, email,telephone, sexe, poste, photo: photoPath },
     });
 
     return NextResponse.json({
