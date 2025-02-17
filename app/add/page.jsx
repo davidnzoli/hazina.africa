@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import ChevronRightIcon from "@mui/icons-material/ChevronLeft";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   FormControlLabel,
   FormLabel,
@@ -12,6 +13,7 @@ import {
   Checkbox,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import { useState, useRef, ChangeEvent } from "react";
 // import Box from "@mui/material/Box";
@@ -79,6 +81,7 @@ export default function Checkout() {
 
       const result = await response.json();
       console.log("Données enregistrées avec succès :", result);
+      console.log(selectedFile.name);
 
       if (canvasRef.current) {
         const jsonData = JSON.stringify(formData);
@@ -130,7 +133,27 @@ export default function Checkout() {
           gap: "20px",
         }}
       >
-        <h1 style={{ color: "blue", fontSize: "16px" }}>AJOUTER PERSONNELS</h1>
+        <Link
+          href="#"
+          style={{
+            textDecoration: "none",
+            fontSize: "16px",
+            color: "rgb(11, 97, 245) ",
+          }}
+        >
+          Dashboard
+        </Link>
+        <h1
+          style={{
+            color: "blue",
+            fontSize: "16px",
+            color: "rgb(28, 181, 12)",
+            fontWeight: "normal",
+          }}
+        >
+          {" "}
+          / ajouter personels
+        </h1>
         <Link
           href="/listPersonel"
           style={{
@@ -142,7 +165,7 @@ export default function Checkout() {
           }}
         >
           <ChevronRightIcon style={{ color: "black" }} />
-          <h1 style={{ color: "black", fontSize: "14px" }}> Back</h1>
+          <h1 style={{ color: "black", fontSize: "14px" }}>back</h1>
         </Link>
       </div>
 
@@ -169,9 +192,9 @@ export default function Checkout() {
             borderColor: { sm: "none", md: "divider" },
             alignItems: "center",
             justifyContent: "center",
-            pt: 16,
+            pt: 6,
             px: 10,
-            gap: 4,
+            gap: 3,
           }}
         >
           <h1
@@ -185,16 +208,49 @@ export default function Checkout() {
           >
             QR-CODE
           </h1>
+          {!selectedFile ? (
+            <Box
+              sx={{
+                height: "70%",
+
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "20px",
+              }}
+            >
+              <CircularProgress style={{ color: "black" }} />
+            </Box>
+          ) : (
+            <>
+              <img
+                src={`/uploads/${selectedFile}`}
+                alt="Profil ici"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/uploads/dessin2.jpg";
+                  e.currentTarget.alt = "Image enregistree";
+                }}
+                style={{
+                  maxWidth: "60%",
+                  maxHeight: "60%",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                }}
+              />
+              <h2 style={{ color: "rgb(28, 181, 12)", fontSize: "11px" }}>
+                Profil enregistré avec succès✅
+              </h2>
+            </>
+          )}
+
           <Box sx={{ flexGrow: 1, width: "100%", maxWidth: 200 }}>
             <canvas
               ref={canvasRef}
               className="qrcode"
-              style={{ marginTop: "10px", maxWidth: "100%", maxHeight: "60%" }}
+              style={{ marginTop: "0px", maxWidth: "100%", maxHeight: "60%" }}
             ></canvas>
           </Box>
-          {/* {formData.photo && (
-            <img src={formData.photo} alt="Photo" width={70} />
-          )} */}
         </Grid>
         <Grid
           item
@@ -207,92 +263,140 @@ export default function Checkout() {
             width: "100%",
             backgroundColor: { xs: "transparent", sm: "background.default" },
             alignItems: "center",
-            pt: { xs: 0, sm: 16 },
+            pt: { xs: 0, sm: 5 },
             px: { xs: 2, sm: 10 },
-            gap: { xs: 4, md: 8 },
+            gap: { xs: 1, md: 3 },
           }}
         >
-          <Grid container spacing={3}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "start",
+              alignItems: "start",
+              gap: "0px",
+            }}
+          >
+            <h1 style={{ fontSize: "17px" }}>
+              Formulaire de personels <br />
+              <span style={{ fontSize: "14px", fontWeight: "initial" }}>
+                Ajouter les nouveaux personels à partir de ce formulaire
+              </span>
+            </h1>
+          </div>
+
+          <Grid container spacing={2} style={{ fontFamily: "Poppins" }}>
             <FormGrid item xs={12} md={6}>
               {" "}
-              <FormLabel htmlFor="first-name" required>
-                Entrez le Nom
+              <FormLabel
+                htmlFor="first-name"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
+                Entrez le nom
               </FormLabel>
               <OutlinedInput
                 id="first-name"
                 name="nom"
                 placeholder="Bisimwa"
                 required
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={handleInputChange}
               />
             </FormGrid>
             <FormGrid item xs={12} md={6}>
-              <FormLabel htmlFor="last-name" required>
-                Entrez le Postnom
+              <FormLabel
+                htmlFor="last-name"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
+                Entrez le postnom
               </FormLabel>
               <OutlinedInput
                 id="last-name"
                 name="postNom"
                 placeholder="John"
                 required
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={(e) =>
                   setFormData({ ...formData, postNom: e.target.value })
                 }
               />
             </FormGrid>
             <FormGrid item xs={12}>
-              <FormLabel htmlFor="address1" required>
-                Addresse Mail
+              <FormLabel
+                htmlFor="address1"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
+                Addresse mail
               </FormLabel>
               <OutlinedInput
                 id="address"
                 name="email"
                 placeholder="exemple@gmail.com"
                 required
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
               />
             </FormGrid>
             <FormGrid item xs={6}>
-              <FormLabel htmlFor="city" required>
-                telephone
+              <FormLabel
+                htmlFor="city"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
+                Téléphone
               </FormLabel>
               <OutlinedInput
                 id=" telephone"
                 name=" telephone"
                 placeholder=""
                 required
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={(e) =>
                   setFormData({ ...formData, telephone: e.target.value })
                 }
               />
             </FormGrid>
             <FormGrid item xs={6}>
-              <FormLabel htmlFor="sexe">Sexe</FormLabel>
+              <FormLabel htmlFor="sexe" style={{ fontFamily: "Poppins" }}>
+                Sexe
+              </FormLabel>
               <Select
                 id="sexe"
                 name="sexe"
                 displayEmpty
                 fullWidth
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 value={formData.sexe}
                 onChange={handleSelectChange}
               >
-                <MenuItem value="Choisissez votre sexe" disabled>
+                <MenuItem
+                  value="Choisissez votre sexe"
+                  disabled
+                  style={{ fontFamily: "Poppins" }}
+                >
                   Choisissez votre sexe
                 </MenuItem>
-                <MenuItem value="homme">Homme</MenuItem>
-                <MenuItem value="femme">Femme</MenuItem>
+                <MenuItem value="homme" style={{ fontFamily: "Poppins" }}>
+                  Homme
+                </MenuItem>
+                <MenuItem value="femme" style={{ fontFamily: "Poppins" }}>
+                  Femme
+                </MenuItem>
               </Select>
             </FormGrid>
 
             <FormGrid item xs={6}>
-              <FormLabel htmlFor="city" required>
+              <FormLabel
+                htmlFor="city"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
                 Photo
               </FormLabel>
               <OutlinedInput
@@ -301,13 +405,17 @@ export default function Checkout() {
                 placeholder=""
                 required
                 type="file"
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={(e) => handleFileChange(e)}
               />
             </FormGrid>
 
             <FormGrid item xs={6}>
-              <FormLabel htmlFor="state" required>
+              <FormLabel
+                htmlFor="state"
+                required
+                style={{ fontFamily: "Poppins" }}
+              >
                 Poste Travail
               </FormLabel>
               <OutlinedInput
@@ -315,45 +423,61 @@ export default function Checkout() {
                 name="poste"
                 placeholder="Poste"
                 required
-                size="small"
+                style={{ fontFamily: "Poppins" }}
                 onChange={(e) =>
                   setFormData({ ...formData, poste: e.target.value })
                 }
               />
             </FormGrid>
-            <div
-              className="boutton-div"
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "end",
-                alignItems: "center",
-                margin: "0px",
-              }}
-            >
-              <Button
-                variant="contained"
-                type="button"
-                sx={{ padding: "10px 10px" }}
-                onClick={generateQR}
-                startIcon={<OpenInNewIcon />}
-                color="success"
+            <FormGrid item xs={12}>
+              <div
+                className="boutton-div"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontFamily: "Poppins",
+                }}
               >
-                Générer Qrcode
-              </Button>
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                onClick={downloadQR}
-                sx={{ padding: "10px 20px" }}
-                tabIndex={-1}
-                startIcon={<CloudUpload />}
-              >
-                Upload Qrcode
-              </Button>
-            </div>
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={generateQR}
+                  startIcon={<OpenInNewIcon />}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "rgb(28, 181, 12)",
+                    color: "white",
+                    textTransform: "lowercase",
+                    fontSize: "15px",
+                    fontFamily: "Poppins",
+                  }}
+                  tabIndex={-1}
+                >
+                  Générer Qrcode
+                </Button>
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  onClick={downloadQR}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "rgb(11, 97, 245)",
+                    color: "white",
+                    textTransform: "lowercase",
+                    fontSize: "15px",
+                    fontFamily: "Poppins",
+                  }}
+                  tabIndex={-1}
+                  startIcon={<CloudUpload />}
+                >
+                  Upload Qrcode
+                </Button>
+              </div>
+            </FormGrid>
           </Grid>
         </Grid>
       </Grid>

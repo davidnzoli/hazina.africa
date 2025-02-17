@@ -1,12 +1,11 @@
 @use "./style/add" as *;
-
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color: rgb(28, 181, 12);
+  color: rgb(11, 97, 245);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,19 +15,11 @@
   }
 }
 
-// @use './variables' as *;
-
-// body {
-//   color: var(--foreground);
-//   background: var(--background);
-//   font-family: Arial, Helvetica, sans-serif;
-// }
-
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
   background-color: #f4f4f4;
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
 }

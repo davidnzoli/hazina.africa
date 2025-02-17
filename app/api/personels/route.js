@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-
-
 export async function GET() {
   try {
     console.log("Récupération des données...");
@@ -17,21 +15,22 @@ export async function GET() {
 
     console.log(" Données envoyées :", formattedPersonels);
     return NextResponse.json(formattedPersonels, { status: 200 });
-
   } catch (error) {
     console.error(" Erreur API /api/personels :", error);
     return NextResponse.json(
-      { error: "Erreur lors de la récupération des données", details: error.message },
+      {
+        error: "Erreur lors de la récupération des données",
+        details: error.message,
+      },
       { status: 500 }
     );
   }
 }
 
-
 export async function POST(request) {
   try {
     const formData = await request.formData();
-    
+
     const nom = formData.get("nom");
     const postNom = formData.get("postNom");
     const email = formData.get("email");
@@ -54,21 +53,26 @@ export async function POST(request) {
       const filePath = path.join(uploadDir, file.name);
       fs.writeFileSync(filePath, buffer);
 
-      photoPath = `/uploads/${file.name}`;
+      photoPath = `${file.name}`;
     }
 
     // Enregistrer les informations dans la base de données
     const newPersonel = await prisma.personels.create({
-      data: { nom, postNom, email,telephone, sexe, poste, photo: photoPath },
+      data: { nom, postNom, email, telephone, sexe, poste, photo: photoPath },
     });
 
-    return NextResponse.json({
-      message: "Données enregistrées avec succès",
-      personel: newPersonel,
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        message: "Données enregistrées avec succès",
+        personel: newPersonel,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Erreur lors de la sauvegarde :", error);
-    return NextResponse.json({ error: "Erreur lors de la sauvegarde" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Erreur lors de la sauvegarde" },
+      { status: 500 }
+    );
   }
 }

@@ -16,7 +16,7 @@ model User {
 }
 
 model Personels {
-  id         String   @id @default(uuid())
+  id         String     @id @default(uuid())
   nom        String
   postNom    String
   email      String
@@ -24,5 +24,14 @@ model Personels {
   sexe       String
   photo      String
   poste      String
-  created_ad DateTime @default(now())
+  created_ad DateTime   @default(now())
+  presences  Presence[]
+}
+
+model Presence {
+  id         String    @id @default(uuid())
+  personelId String
+  date       DateTime  @default(now())
+  type       String
+  personel   Personels @relation(fields: [personelId], references: [id], onDelete: Cascade)
 }
