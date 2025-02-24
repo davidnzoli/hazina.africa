@@ -1,41 +1,49 @@
+// app/api/presence/route.js
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma"; // Connexion à Prisma
+import prisma from "@/lib/prisma";
 
 export async function POST(req) {
   try {
-    const { personelId } = await req.json();
-
-    if (!personelId) {
+    const { personelId, photo, nom } = await req.json();
+    if (!personelId || !photo) {
       return NextResponse.json(
-        { error: "ID personnel requis" },
+        { error: "Données manquantes" },
         { status: 400 }
       );
     }
 
-    // Récupérer la dernière présence de cet employé
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+
+    // Vérifier la dernière présence enregistrée
     const lastPresence = await prisma.presence.findFirst({
       where: { personelId },
-      orderBy: { date: "desc" },
+      orderBy: { createdAt: "desc" },
     });
 
-    let newType = "ENTREE"; // Par défaut, on enregistre une entrée
-
-    // Si la dernière présence est une entrée, alors on enregistre une sortie
-    if (lastPresence && lastPresence.type === "ENTREE") {
-      newType = "SORTIE";
+    let etat = "arrivée";
+    if (
+      lastPresence &&
+      lastPresence.date === today &&
+      lastPresence.etat === "arrivée"
+    ) {
+      etat = "départ";
     }
 
-    // Enregistrer la nouvelle présence
+    // Enregistrement de la présence
     const presence = await prisma.presence.create({
       data: {
-        personelId,
-        type: newType,
+        idPersonnel,
+        photo,
+        nom,
+        date: today,
+        heure: now.toISOString().split("T")[1].split(".")[0],
+        etat,
       },
     });
 
-    return NextResponse.json({ success: true, presence }, { status: 201 });
+    return NextResponse.json(presence, { status: 201 });
   } catch (error) {
-    console.error("Erreur lors de l'enregistrement de la présence :", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

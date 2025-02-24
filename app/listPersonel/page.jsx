@@ -8,18 +8,29 @@ import {
   Paper,
   Modal,
   TextField,
-  CircularProgress, // Importation de l'icône de chargement
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Link from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
+import DeleteItemAlertDialog from "@/components/alert_dialog";
 
 export default function ListPersonel() {
   const [personels, setPersonels] = useState([]);
-  const [loading, setLoading] = useState(true); // Nouvel état pour suivre le chargement
+  const [personel2, setPersonel2] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [openmodal, setopenmodal] = useState(false);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
   const [selectedPersonel, setSelectedPersonel] = useState(null);
+  const [selectedName, setselecteName] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,54 +38,96 @@ export default function ListPersonel() {
         const response = await fetch("/api/personels");
         const data = await response.json();
         setPersonels(data);
+        console.log("element data", data);
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
       } finally {
-        setLoading(false); // Mise à jour du statut de chargement une fois les données récupérées
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log("🟢 selectedPersonel mis à jour :", selectedPersonel);
+  }, [selectedPersonel]);
   const handleDelete = async (id) => {
-    if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
-      console.log("Tentative de suppression de l'ID :", id);
-      console.log(`URL appelée : /api/personels/${id}`);
+    console.log("ID reçu dans handleDelete:", id); // Vérification
 
-      try {
-        const response = await fetch(`/api/personels/${id}`, {
-          method: "DELETE",
-        });
+    if (!id) {
+      console.error("L'ID est undefined !");
+      return;
+    }
 
-        const text = await response.text();
-        console.log("Réponse brute de l'API :", text);
+    try {
+      const response = await fetch(`/api/personels/${id}`, {
+        method: "DELETE",
+      });
 
-        if (!response.ok) {
-          console.error("Erreur lors de la suppression :", text);
-          return;
-        }
+      const text = await response.text();
+      console.log("Réponse brute de l'API :", text);
 
-        setPersonels(personels.filter((personel) => personel.id !== id));
-      } catch (error) {
-        console.error("Erreur lors de la suppression :", error);
+      if (!response.ok) {
+        console.error("Erreur lors de la suppression :", text);
+        return;
       }
+
+      setPersonels((prev) => prev.filter((personel) => personel.id !== id));
+      setPersonel2((prev) => prev.filter((personel) => personel.nom !== nom));
+    } catch (error) {
+      console.error("Erreur lors de la suppression :", error);
     }
   };
 
-  const handleOpen = (personel) => {
-    setSelectedPersonel(personel);
+  const handleOpen = (id, nom) => {
+    // setSelectedPersonel(personel);
+    // setOpen(true);
+    console.log("ID reçu dans handleOpen :", id);
+    setSelectedPersonel(personels.find((p) => p.id === id) || {});
+    setselecteName(personels.find((p) => p.nom === nom) || {});
     setOpen(true);
+  };
+  const handleOpen2 = (ItemId) => {
+    console.log("🟢 ID envoyé à handleOpen2 :", ItemId);
+    setSelectedPersonel(ItemId);
+
+    setTimeout(() => {
+      console.log(
+        "🟢 Valeur de selectedPersonel après mise à jour :",
+        selectedPersonel
+      );
+      setopenmodal(true); // 🔥 Ouvrir le modal APRÈS la mise à jour
+    }, 100);
   };
 
   const handleClose = () => {
-    setOpen(false);
     setSelectedPersonel(null);
+    setselecteName(null);
+    setOpen(false);
+  };
+  const handleClose2 = () => {
+    setSelectedPersonel(null);
+    setselecteName(null);
+    setopenmodal(false);
   };
 
   const handleUpdate = async () => {
-    if (!selectedPersonel) return;
+    console.log("Valeur de selectedPersonel:", selectedPersonel); // 🔍 Debug
+    if (!selectedPersonel || !selectedPersonel.id) {
+      console.error("ID du personnel sélectionné est indéfini !");
+      return;
+    }
+    if (!selectedPersonel || !selectedPersonel.id) {
+      setSnackbarMessage("ID du personnel sélectionné est indéfini !");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+      return;
+    }
     try {
-      const response = await fetch(`/api/personels/${selectedPersonel.id}`, {
+      const url = `/api/personels/${selectedPersonel.id}`;
+      console.log("URL API appelée :", url);
+
+      const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,8 +145,14 @@ export default function ListPersonel() {
         )
       );
       handleClose();
+      setSnackbarMessage("Mise à jour réussie !");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Erreur lors de la mise à jour :", error);
+      setSnackbarMessage("Erreur lors de la mise à jour !");
+      setSnackbarType("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -109,22 +168,25 @@ export default function ListPersonel() {
       field: "action",
       headerName: "Action",
       width: 130,
-      renderCell: (params) => (
-        <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <IconButton
-            style={{ color: "rgb(28, 181, 12)" }}
-            onClick={() => handleOpen(params.row)}
-          >
-            <UpdateSharpIcon />
-          </IconButton>
-          <IconButton
-            style={{ color: "red" }}
-            onClick={() => handleDelete(params.row.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      ),
+      renderCell: (params) => {
+        console.log("ID dans renderCell:", params.row.id); // Vérification
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <IconButton
+              style={{ color: "rgb(28, 181, 12)" }}
+              onClick={() => handleOpen(params.row.id)}
+            >
+              <UpdateSharpIcon />
+            </IconButton>
+            <IconButton
+              style={{ color: "red" }}
+              onClick={() => handleOpen2(params.row.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        );
+      },
     },
   ];
 
@@ -343,6 +405,27 @@ export default function ListPersonel() {
           </Box>
         </Box>
       </Modal>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+      <DeleteItemAlertDialog
+        Item2={selectedName}
+        ItemId={selectedPersonel}
+        isOpen={openmodal}
+        onDelete={handleDelete}
+        onClose={handleClose2}
+      />
     </Box>
   );
 }

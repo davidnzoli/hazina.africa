@@ -32,6 +32,7 @@ export default function Checkout() {
   // const [age, setAge] = useState("");
   const canvasRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [formKey, setFormKey] = useState(Date.now());
 
   const [formData, setFormData] = useState({
     nom: "",
@@ -53,6 +54,22 @@ export default function Checkout() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      nom: "",
+      postNom: "",
+      sexe: "",
+      poste: "",
+      email: "",
+      photo: "",
+      Telephone: "",
+    });
+    // setSelectedFile(null);
+
+    // Changer la clé du formulaire pour forcer le re-render
+    setFormKey(Date.now());
   };
 
   const generateQR = async () => {
@@ -90,6 +107,9 @@ export default function Checkout() {
           margin: 2,
         });
       }
+      setTimeout(() => {
+        resetForm();
+      }, 300);
     } catch (error) {
       console.error("Erreur lors de l'enregistrement :", error);
     }
@@ -183,7 +203,7 @@ export default function Checkout() {
           item
           xs={12}
           sm={5}
-          lg={4}
+          lg={3.5}
           sx={{
             display: { xs: "none", md: "flex" },
             flexDirection: "column",
@@ -256,7 +276,7 @@ export default function Checkout() {
           item
           xs={12}
           md={7}
-          lg={8}
+          lg={8.5}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -286,13 +306,21 @@ export default function Checkout() {
             </h1>
           </div>
 
-          <Grid container spacing={2} style={{ fontFamily: "Poppins" }}>
+          <Grid
+            container
+            spacing={2}
+            style={{ fontFamily: "Poppins" }}
+            key={formKey}
+          >
             <FormGrid item xs={12} md={6}>
               {" "}
               <FormLabel
                 htmlFor="first-name"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{
+                  fontFamily: "Poppins",
+                  color: "black",
+                }}
               >
                 Entrez le nom
               </FormLabel>
@@ -309,7 +337,7 @@ export default function Checkout() {
               <FormLabel
                 htmlFor="last-name"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", color: "black" }}
               >
                 Entrez le postnom
               </FormLabel>
@@ -328,7 +356,7 @@ export default function Checkout() {
               <FormLabel
                 htmlFor="address1"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", color: "black" }}
               >
                 Addresse mail
               </FormLabel>
@@ -347,14 +375,14 @@ export default function Checkout() {
               <FormLabel
                 htmlFor="city"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", color: "black" }}
               >
                 Téléphone
               </FormLabel>
               <OutlinedInput
                 id=" telephone"
                 name=" telephone"
-                placeholder=""
+                placeholder="numéro"
                 required
                 style={{ fontFamily: "Poppins" }}
                 onChange={(e) =>
@@ -363,7 +391,10 @@ export default function Checkout() {
               />
             </FormGrid>
             <FormGrid item xs={6}>
-              <FormLabel htmlFor="sexe" style={{ fontFamily: "Poppins" }}>
+              <FormLabel
+                htmlFor="sexe"
+                style={{ fontFamily: "Poppins", color: "black" }}
+              >
                 Sexe
               </FormLabel>
               <Select
@@ -395,7 +426,7 @@ export default function Checkout() {
               <FormLabel
                 htmlFor="city"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", color: "black" }}
               >
                 Photo
               </FormLabel>
@@ -414,7 +445,7 @@ export default function Checkout() {
               <FormLabel
                 htmlFor="state"
                 required
-                style={{ fontFamily: "Poppins" }}
+                style={{ fontFamily: "Poppins", color: "black" }}
               >
                 Poste Travail
               </FormLabel>
